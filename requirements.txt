@@ -1,0 +1,7 @@
+Django==4.2.7
+Pillow==10.0.1
+django-crispy-forms==2.1
+crispy-tailwind==0.5.0
+django-tables2==2.7.0
+whitenoise==6.5.0
+echo "whitenoise==6.5.0"

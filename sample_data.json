@@ -1,0 +1,58 @@
+[
+    {
+      "model": "menu.category",
+      "pk": 1,
+      "fields": {
+        "name": "Pizza",
+        "slug": "pizza",
+        "icon": "fas fa-pizza-slice",
+        "description": "Delicious pizzas with various toppings",
+        "is_active": true,
+        "created_at": "2023-01-01T00:00:00Z",
+        "updated_at": "2023-01-01T00:00:00Z"
+      }
+    },
+    {
+      "model": "menu.category",
+      "pk": 2,
+      "fields": {
+        "name": "Burgers",
+        "slug": "burgers",
+        "icon": "fas fa-hamburger",
+        "description": "Juicy burgers with fresh ingredients",
+        "is_active": true,
+        "created_at": "2023-01-01T00:00:00Z",
+        "updated_at": "2023-01-01T00:00:00Z"
+      }
+    },
+    {
+      "model": "menu.menuitem",
+      "pk": 1,
+      "fields": {
+        "name": "Margherita Pizza",
+        "slug": "margherita-pizza",
+        "description": "Classic pizza with tomato sauce, mozzarella, and fresh basil",
+        "category": 1,
+        "price": "199.00",
+        "image": "menu_items/pizza_margherita.jpg",
+        "is_available": true,
+        "created_at": "2023-01-01T00:00:00Z",
+        "updated_at": "2023-01-01T00:00:00Z"
+      }
+    },
+    {
+      "model": "menu.menuitem",
+      "pk": 2,
+      "fields": {
+        "name": "Classic Burger",
+        "slug": "classic-burger",
+        "description": "Juicy beef patty with lettuce, tomato, and special sauce",
+        "category": 2,
+        "price": "129.00",
+        "image": "menu_items/burger_classic.jpg",
+        "is_available": true,
+        "created_at": "2023-01-01T00:00:00Z",
+        "updated_at": "2023-01-01T00:00:00Z"
+      }
+    }
+  ]
