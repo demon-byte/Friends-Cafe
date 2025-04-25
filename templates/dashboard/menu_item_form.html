@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}{% if form.instance.pk %}Edit{% else %}Add{% endif %} Menu Item - Friends Cafe{% endblock %}
+
+{% block content %}
+<section class="py-12 bg-white">
+    <div class="container mx-auto px-4 max-w-3xl">
+        <h2 class="text-3xl font-bold mb-8">{% if form.instance.pk %}Edit{% else %}Add{% endif %} Menu Item</h2>
+        
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <div class="mt-6">
+                <button type="submit" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-6 rounded-lg">
+                    Save
+                </button>
+                <a href="{% url 'dashboard:menu_item_list' %}" class="ml-4 text-gray-600 hover:text-gray-800">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

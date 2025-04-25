@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load django_tables2 %}
+
+{% block title %}Manage Menu Items - Friends Cafe{% endblock %}
+
+{% block content %}
+<section class="py-12 bg-white">
+    <div class="container mx-auto px-4">
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-3xl font-bold">Menu Items</h2>
+            <a href="{% url 'dashboard:menu_item_add' %}" 
+               class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded-lg">
+                <i class="fas fa-plus mr-1"></i> Add New Item
+            </a>
+        </div>
+
+        <div class="mb-4">
+            <form method="get" class="flex items-center gap-4">
+                <select name="category" class="px-4 py-2 border border-gray-300 rounded-lg">
+                    <option value="">All Categories</option>
+                    {% for category in categories %}
+                    <option value="{{ category.slug }}" {% if request.GET.category == category.slug %}selected{% endif %}>
+                        {{ category.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded-lg">
+                    Filter
+                </button>
+            </form>
+        </div>
+
+        <div class="overflow-x-auto">
+            {% render_table table %}
+        </div>
+    </div>
+</section>
+{% endblock %}

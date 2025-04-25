@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Orders - Friends Cafe{% endblock %}
+
+{% block content %}
+<section class="py-12 bg-white">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12">My Orders</h2>
+        
+        {% if orders %}
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="py-3 px-4 text-left">Order ID</th>
+                        <th class="py-3 px-4 text-left">Date</th>
+                        <th class="py-3 px-4 text-left">Items</th>
+                        <th class="py-3 px-4 text-left">Total</th>
+                        <th class="py-3 px-4 text-left">Status</th>
+                        <th class="py-3 px-4 text-left">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    {% for order in orders %}
+                    <tr>
+                        <td class="py-4 px-4">{{ order.order_number }}</td>
+                        <td class="py-4 px-4">{{ order.created_at|date:"M d, Y" }}</td>
+                        <td class="py-4 px-4">
+                            <div class="text-sm">
+                                {% for item in order.items.all|slice:":2" %}
+                                    <div>{{ item.item.name }} x {{ item.quantity }}</div>
+                                {% endfor %}
+                                {% if order.items.count > 2 %}
+                                    <div>+ {{ order.items.count|add:"-2" }} more items</div>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td class="py-4 px-4">₹{{ order.total_price }}</td>
+                        <td class="py-4 px-4">
+                            <span class="px-3 py-1 rounded-full text-sm order-status-{{ order.status }}">{{ order.get_status_display }}</span>
+                        </td>
+                        <td class="py-4 px-4">
+                            <a href="{% url 'order_detail' order.id %}" class="text-amber-600 hover:text-amber-800 font-medium">View</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <div class="mt-8 flex justify-center">
+            <nav class="flex items-center space-x-2">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1" class="px-3 py-1 rounded-lg border border-gray-300 hover:bg-gray-100">
+                        &laquo; First
+                    </a>
+                    <a href="?page={{ page_obj.previous_page_number }}" class="px-3 py-1 rounded-lg border border-gray-300 hover:bg-gray-100">
+                        Previous
+                    </a>
+                {% endif %}
+                
+                <span class="px-3 py-1">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                </span>
+                
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" class="px-3 py-1 rounded-lg border border-gray-300 hover:bg-gray-100">
+                        Next
+                    </a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}" class="px-3 py-1 rounded-lg border border-gray-300 hover:bg-gray-100">
+                        Last &raquo;
+                    </a>
+                {% endif %}
+            </nav>
+        </div>
+        {% endif %}
+        
+        {% else %}
+        <div class="text-center py-12">
+            <div class="text-6xl text-amber-500 mb-4">
+                <i class="fas fa-clipboard-list"></i>
+            </div>
+            <h3 class="text-2xl font-bold mb-2">No orders yet</h3>
+            <p class="text-gray-600 mb-6">You haven't placed any orders with us yet.</p>
+            <a href="{% url 'menu_list' %}" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-8 rounded-lg inline-block">
+                Order Now
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

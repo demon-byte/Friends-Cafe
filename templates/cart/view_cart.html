@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Your Cart - Friends Cafe{% endblock %}
+
+{% block content %}
+<section class="py-12 bg-white">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12">Your Cart</h2>
+        
+        {% if cart.items.count > 0 %}
+        <div class="bg-gray-50 rounded-lg shadow-sm overflow-hidden">
+            <!-- Cart Items -->
+            <div class="divide-y divide-gray-200">
+                {% for cart_item in cart.items.all %}
+                <div class="cart-item p-4 flex flex-col md:flex-row gap-4 transition duration-300">
+                    <img src="{{ cart_item.item.image.url }}" alt="{{ cart_item.item.name }}" class="w-24 h-24 object-cover rounded-lg">
+                    <div class="flex-1">
+                        <h4 class="font-bold">{{ cart_item.item.name }}</h4>
+                        <p class="text-gray-600 text-sm">₹{{ cart_item.item.price }}</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <form action="{% url 'update_cart_item' cart_item.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="quantity" value="{{ cart_item.quantity|add:'-1' }}">
+                            <button type="submit" class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300">
+                                <i class="fas fa-minus text-xs"></i>
+                            </button>
+                        </form>
+                        <span class="font-medium">{{ cart_item.quantity }}</span>
+                        <form action="{% url 'update_cart_item' cart_item.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="quantity" value="{{ cart_item.quantity|add:'1' }}">
+                            <button type="submit" class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300">
+                                <i class="fas fa-plus text-xs"></i>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="font-bold">₹{{ cart_item.total_price }}</div>
+                    <form action="{% url 'remove_from_cart' cart_item.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="text-red-500 hover:text-red-700">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Cart Summary -->
+            <div class="p-6 bg-gray-100">
+                <div class="flex justify-between mb-2">
+                    <span>Subtotal:</span>
+                    <span class="font-bold">₹{{ cart.total_price }}</span>
+                </div>
+                <div class="flex justify-between mb-2">
+                    <span>Delivery Fee:</span>
+                    <span class="font-bold">₹30</span>
+                </div>
+                <div class="flex justify-between mb-4">
+                    <span>Tax (5%):</span>
+                    <span class="font-bold">₹{{ cart.tax_amount|floatformat:2 }}</span>
+                </div>
+                <div class="flex justify-between text-lg font-bold border-t border-gray-300 pt-4">
+                    <span>Total:</span>
+                    <span>₹{{ cart.grand_total|floatformat:2 }}</span>
+                </div>
+                
+                <a href="{% url 'checkout' %}" class="mt-6 block w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-4 rounded-lg text-center transition duration-300">
+                    Proceed to Checkout
+                </a>
+            </div>
+        </div>
+        {% else %}
+        <div class="text-center py-12">
+            <div class="text-6xl text-amber-500 mb-4">
+                <i class="fas fa-shopping-cart"></i>
+            </div>
+            <h3 class="text-2xl font-bold mb-2">Your cart is empty</h3>
+            <p class="text-gray-600 mb-6">Looks like you haven't added any items to your cart yet.</p>
+            <a href="{% url 'menu_list' %}" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-8 rounded-lg inline-block">
+                Browse Menu
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

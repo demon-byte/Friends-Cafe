@@ -1,0 +1,8 @@
+<form method="post" action="{% url 'dashboard:update_order_status' record.id %}">
+    {% csrf_token %}
+    <select name="status" onchange="this.form.submit()" class="border rounded p-1">
+        {% for value, name in record.ORDER_STATUS_CHOICES %}
+            <option value="{{ value }}" {% if value == record.status %}selected{% endif %}>{{ name }}</option>
+        {% endfor %}
+    </select>
+</form>

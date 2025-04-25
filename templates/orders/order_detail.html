@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Order #{{ order.order_number }} - Friends Cafe{% endblock %}
+
+{% block content %}
+<section class="py-12 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex flex-col md:flex-row md:justify-between md:items-center">
+                    <div class="mb-4 md:mb-0">
+                        <h2 class="text-2xl font-bold">Order #{{ order.order_number }}</h2>
+                        <p class="text-gray-600">Placed on {{ order.created_at|date:"F j, Y g:i A" }}</p>
+                    </div>
+                    <div>
+                        <span class="px-4 py-2 rounded-full text-sm font-medium order-status-{{ order.status }}">
+                            {{ order.get_status_display }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="p-6 border-b border-gray-200">
+                <h3 class="text-lg font-bold mb-4">Delivery Information</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <h4 class="font-medium text-gray-700">Delivery Address</h4>
+                        <p class="text-gray-600">{{ order.delivery_address }}</p>
+                    </div>
+                    <div>
+                        <h4 class="font-medium text-gray-700">Payment Method</h4>
+                        <p class="text-gray-600">{{ order.get_payment_method_display }}</p>
+                    </div>
+                    <div>
+                        <h4 class="font-medium text-gray-700">Payment Status</h4>
+                        <p class="text-gray-600">{{ order.get_payment_status_display }}</p>
+                    </div>
+                    {% if order.delivery_notes %}
+                    <div>
+                        <h4 class="font-medium text-gray-700">Delivery Notes</h4>
+                        <p class="text-gray-600">{{ order.delivery_notes }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="p-6">
+                <h3 class="text-lg font-bold mb-4">Order Items</h3>
+                <div class="divide-y divide-gray-200">
+                    {% for item in order.items.all %}
+                    <div class="py-4 flex flex-col md:flex-row">
+                        <div class="flex items-center mb-2 md:mb-0 md:w-1/2">
+                            <img src="{{ item.item.image.url }}" alt="{{ item.item.name }}" 
+                                 class="w-16 h-16 object-cover rounded-lg mr-4">
+                            <div>
+                                <h4 class="font-medium">{{ item.item.name }}</h4>
+                                <p class="text-sm text-gray-600">{{ item.item.category.name }}</p>
+                            </div>
+                        </div>
+                        <div class="md:w-1/4 flex items-center">
+                            <span class="text-gray-600">Quantity: {{ item.quantity }}</span>
+                        </div>
+                        <div class="md:w-1/4 flex items-center justify-end">
+                            <span class="font-medium">₹{{ item.total_price }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="border-t border-gray-200 pt-6 mt-6">
+                    <div class="flex justify-between mb-2">
+                        <span>Subtotal:</span>
+                        <span>₹{{ order.subtotal }}</span>
+                    </div>
+                    <div class="flex justify-between mb-2">
+                        <span>Delivery Fee:</span>
+                        <span>₹30</span>
+                    </div>
+                    <div class="flex justify-between mb-4">
+                        <span>Tax (5%):</span>
+                        <span>₹{{ order.tax_amount|floatformat:2 }}</span>
+                    </div>
+                    <div class="flex justify-between font-bold text-lg pt-4 border-t border-gray-200">
+                        <span>Total:</span>
+                        <span>₹{{ order.total_price }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-8 text-center">
+            <a href="{% url 'order_list' %}" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-8 rounded-lg inline-block">
+                Back to Orders
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
