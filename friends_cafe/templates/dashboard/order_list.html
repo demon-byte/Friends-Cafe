@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% load django_tables2 %}
+
+{% block content %}
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-2xl font-bold mb-4">Orders</h1>
+        {% render_table table %}
+    </div>
+{% endblock %}
